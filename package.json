@@ -1,10 +1,19 @@
 {
   "name": "sol-command",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": "./dist/src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p ./tsconfig.json",
+    "watch": "tsc -w -p ./src",
+    "format": "prettier --loglevel warn --write \"**/*.{ts,js,json,yaml}\"",
+    "format:check": "prettier --loglevel warn --check \"**/*.{ts,js,json,yaml}\"",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "lint:check": "eslint \"src/**/*.ts\"",
+    "prepublishOnly": "yarn build"
   },
   "repository": {
     "type": "git",
@@ -13,8 +22,21 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "files": [
+    "src/**/*.ts",
+    "dist/**/*.{ts,js,map}"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "bugs": {
     "url": "https://github.com/raindrops-protocol/sol-command/issues"
   },
-  "homepage": "https://github.com/raindrops-protocol/sol-command#readme"
+  "homepage": "https://github.com/raindrops-protocol/sol-command#readme",
+  "dependencies": {
+    "@project-serum/anchor": "^0.23.0",
+    "commander": "^9.2.0",
+    "loglevel": "^1.8.0",
+    "typescript": "^4.3.5"
+  }
 }
