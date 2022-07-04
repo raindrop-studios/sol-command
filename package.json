@@ -1,11 +1,12 @@
 {
   "name": "@raindrops-protocol/sol-command",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "exports": "./dist/src/index.js",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc -p ./tsconfig.json",
     "watch": "tsc -w -p ./src",
