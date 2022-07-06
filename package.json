@@ -27,9 +27,6 @@
     "src/**/*.ts",
     "dist/**/*.{ts,js,map}"
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "bugs": {
     "url": "https://github.com/raindrops-protocol/sol-command/issues"
   },
