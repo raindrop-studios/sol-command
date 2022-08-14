@@ -35,6 +35,24 @@ export function programCommand(name: string, requireKeyPair: boolean = true) {
   }
 }
 
+function buildProgramCommandWithOptions(name: string, options: Array<string|[string, string]|[string, string, string|boolean]>, requireKeyPair?: boolean) {
+  let command = programCommand(name, requireKeyPair);
+
+  options.forEach(option => {
+    if (typeof option === 'string') {
+      command = command.option(option);
+    } else {
+      if (option.length === 2) {
+        command = command.option(option[0], option[1]);
+      } else {
+        command = command.option(option[0], option[1], option[2]);
+      }
+    }
+  });
+
+  return command;
+}
+
 function buildProgramCommandWithArgs(name: string, args: Array<Argument>, requireKeyPair?: boolean) {
   let command = programCommand(name, requireKeyPair);
 
@@ -54,6 +72,32 @@ export function programCommandWithArgs(name: string, args: Array<Argument>, acti
 
 export function programCommandWithConfig(name: string, action: (...args) => Promise<any>, requireKeyPair?: boolean) {
   return programCommandWithArgsAndConfig(name, [], action, requireKeyPair);
+}
+
+export function programCommandWithOptionsAndArgsAndConfig(name: string, options: Array<string|[string, string]|[string, string, string|boolean]>, args: Array<Argument>, action: (...args) => Promise<any>, requireKeyPair?: boolean) {
+  let command =  buildProgramCommandWithOptions(name, options, requireKeyPair)
+    .requiredOption(
+      "-cp, --config-path <string>",
+      "JSON file with namespace settings"
+    )
+
+  args.forEach(argument => {
+    command = command.addArgument(argument);
+  });
+
+  command.action(async function(...args) {
+    const { configPath } = this.opts();
+
+    if (configPath === undefined) {
+      throw new Error("The configPath is undefined");
+    }
+
+    const config = readConfig(configPath)
+
+    action(config, ...args);
+  });
+
+  return command;
 }
 
 export function programCommandWithArgsAndConfig(name: string, args: Array<Argument>, action: (...args) => Promise<any>, requireKeyPair?: boolean) {
